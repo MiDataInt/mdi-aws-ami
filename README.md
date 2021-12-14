@@ -120,14 +120,14 @@ Among many choices, we generally use Visual Studio Code remote connection via SS
 From within your terminal, i.e., bash command shell, on the new instance:
 
 ```
-apt-get update
-apt-get upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 ```
 
 #### Install Git
 
 ```
-apt-get install -y git
+sudo apt-get install -y git
 ```
 
 #### Clone this repository
@@ -141,7 +141,7 @@ git clone https://github.com/MiDataInt/mdi-aws-ami.git
 
 ```
 cd mdi-aws-ami
-./initialize-mdi-instance.sh
+sudo bash ./initialize-mdi-instance.sh
 ```
 
 It will take a few minutes for all of the server components 

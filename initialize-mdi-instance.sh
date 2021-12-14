@@ -5,12 +5,16 @@
 # Create a new instance, then run this script from an SSH command prompt.
 #---------------------------------------------------------------
 
+#---------------------------------------------------------------
+# use sudo initially to install resources and configure server as root
+#---------------------------------------------------------------
+
 # update system
-apt-get update
-apt-get upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
 
 # install miscellaneous tools
-apt-get install -y \
+sudo apt-get install -y \
   git \
   build-essential \
   tree \
@@ -22,44 +26,51 @@ apt-get install -y \
   binutils
 
 # install Docker
-apt-get install -y \
-  apt-transport-https  \
-  ca-certificates  \
+sudo apt-get install \
+  ca-certificates \
   curl \
-  gnupg-agent \
-  software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-apt-key fingerprint 0EBFCD88
-add-apt-repository  "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
-apt-get update
-apt-get install -y \
+  gnupg \
+  lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install -y \
   docker-ce \
   docker-ce-cli \
   containerd.io
 
 # allow user ubuntu to control docker without sudo
-usermod -aG docker ubuntu
-newgrp docker
+sudo usermod -aG docker ubuntu
+sudo newgrp docker
 
 # install docker-compose
-curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-# set server users, paths and permissions
-groupadd mdi-edit
-usermod -a -G mdi-edit ubuntu
+# set server groups
+sudo groupadd mdi-edit
+sudo usermod -a -G mdi-edit ubuntu
+
+# set server paths and permissions
 cd /srv
-mkdir data # for external data bind-mounted into running instances
-mkdir mdi  # for mdi server support
+sudo mkdir data # for external data bind-mounted into running instances
+sudo mkdir mdi  # for mdi server support
+sudo chown -R ubuntu   data mdi
+sudo chgrp -R mdi-edit data mdi
+sudo chmod -R ug+rwx   data mdi
+
+#---------------------------------------------------------------
+# continue as user ubuntu (i.e., not sudo) to populate /srv
+#---------------------------------------------------------------
 mkdir mdi/config
 mkdir mdi/logs
 mkdir mdi/resource-scripts
-chgrp -R mdi-edit mdi
-chmod -R g+rwx mdi
 
 # clone the MDI server code repository
 cd /srv/mdi
-sudo -u ubuntu git clone https://github.com/MiDataInt/mdi-web-server.git
+git clone https://github.com/MiDataInt/mdi-web-server.git
 
 # copy web server configuration templates to final location outside of the repo
 cp mdi-web-server/lib/inst/*.sh  /srv/mdi/config
@@ -74,4 +85,6 @@ echo -e "\n\nexport PATH=/srv/mdi:$PATH\n" >> ~/.bashrc
 echo
 docker --version
 docker-compose --version
+echo
+tree -L 4 /srv
 echo

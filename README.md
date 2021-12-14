@@ -31,7 +31,7 @@ programs include Docker, installed into the MDI base AMI.
 Docker images represent the installation of a server OS and support programs
 that can be launched as a Docker container, running on the EC2 instance that
 was created by an AMI. Docker images are built in 2nd stage AMIs, e.g., to
-allow a new MDI installation based on a new R version release without 
+allow a new MDI installation based on a new R version without 
 having to reinstall Docker and other base OS support programs.
 
 ## STEP 1 - Base AMI with Linux OS and Cloned MDI Server Repos
@@ -64,7 +64,7 @@ Ohio, us-east-2, AWS region, the one closest to Ann Arbor, MI.
 
 An AMI is not tied to a specific instance type, but we create the 
 AMIs with the same resources as is recommended for eventually running
-instances, i.e., t3 medium.
+MDI public server instances, i.e., t3 medium.
 
 #### Storage
 
@@ -93,8 +93,8 @@ container by scripts found in mdi-web-server.git.
 ### Step 1a - create the base image instance
 
 We only need to create a base image once per Ubuntu version. The steps
-below will clone this repo into a new EC2 instance and execute the 
-server configuration script to prepare for installing the MDI in later 
+below will clone the mdi-aws-ami repo into a new EC2 instance and execute  
+the server configuration script to prepare for installing the MDI in later 
 steps/AMIs. The script prepares the operating system to run the Docker 
 images that will run R and the MDI.
 
@@ -111,26 +111,15 @@ Details for how to log in to an AWS instance are amply documented by Amazon.
 
 <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstances.html>
 
-Among many choices, we generally use Visual Studio Code remote connection via SSH:
+Among many choices, we typically use Visual Studio Code with a remote connection 
+established via SSH:
 
 >https://code.visualstudio.com/docs/remote/remote-overview>
 
-#### Update the OS
-
-From within your terminal, i.e., bash command shell, on the new instance:
-
-```
-sudo apt-get update
-sudo apt-get upgrade -y
-```
-
-#### Install Git
-
-```
-sudo apt-get install -y git
-```
-
 #### Clone this repository
+
+From within your terminal, i.e., bash command shell, on the new instance 
+(note that git is pre-installed with Ubuntu 20.04):
 
 ```
 cd ~
@@ -141,7 +130,7 @@ git clone https://github.com/MiDataInt/mdi-aws-ami.git
 
 ```
 cd mdi-aws-ami
-sudo bash ./initialize-mdi-instance.sh
+bash ./initialize-mdi-instance.sh
 ```
 
 It will take a few minutes for all of the server components 
@@ -149,11 +138,11 @@ to be installed.
 
 #### Save the base AMI
 
-From within the AWS Management Console, select the running
-instance and execute:
+From within the [AWS Management Console](https://aws.amazon.com/console/), 
+select the running EC2 instance and execute:
 
 Actions --> Images and templates --> Create image
 
-The base image should be named by the following conventions:
+The base image should be named according to this pattern:
 
-"Michigan Data Interface, base image, Ubuntu Linux 20.0.4"
+"Michigan Data Interface, base image, Ubuntu Linux 20.04"

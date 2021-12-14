@@ -10,10 +10,14 @@
 #---------------------------------------------------------------
 
 # update system
+echo 
+echo "updating operating system"
 sudo apt-get update
 sudo apt-get upgrade -y
 
 # install miscellaneous tools
+echo 
+echo "install miscellaneous tools"
 sudo apt-get install -y \
   git \
   build-essential \
@@ -26,6 +30,8 @@ sudo apt-get install -y \
   binutils
 
 # install Docker
+echo 
+echo "install Docker engine"
 sudo apt-get install \
   ca-certificates \
   curl \
@@ -41,19 +47,26 @@ sudo apt-get install -y \
   docker-ce-cli \
   containerd.io
 
-# allow user ubuntu to control docker without sudo
-sudo usermod -aG docker ubuntu
-sudo newgrp docker
-
 # install docker-compose
+echo 
+echo "install Docker compose"
 sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
+# allow user ubuntu to control docker without sudo
+echo 
+echo "add ubuntu to docker group"
+sudo usermod -aG docker ubuntu
+
 # set server groups
+echo 
+echo "create mdi-edit group"
 sudo groupadd mdi-edit
 sudo usermod -a -G mdi-edit ubuntu
 
 # set server paths and permissions
+echo 
+echo "initialize /srv file tree (root)"
 cd /srv
 sudo mkdir data # for external data bind-mounted into running instances
 sudo mkdir mdi  # for mdi server support
@@ -64,27 +77,36 @@ sudo chmod -R ug+rwx   data mdi
 #---------------------------------------------------------------
 # continue as user ubuntu (i.e., not sudo) to populate /srv
 #---------------------------------------------------------------
+echo 
+echo "initialize /srv file tree (ubuntu)"
 mkdir mdi/config
 mkdir mdi/logs
 mkdir mdi/resource-scripts
 
 # clone the MDI server code repository
+echo 
+echo "clone mdi-web-server.git"
 cd /srv/mdi
 git clone https://github.com/MiDataInt/mdi-web-server.git
 
 # copy web server configuration templates to final location outside of the repo
+echo 
+echo "copy server config templates"
 cp mdi-web-server/lib/inst/*.sh  /srv/mdi/config
 cp mdi-web-server/lib/inst/*.yml /srv/mdi/config
 
 # add the server executable script to PATH
+echo 
+echo "initialize server target and add to PATH"
 cp mdi-web-server/lib/inst/server /srv/mdi
 chmod ug+x /srv/mdi/server
-echo -e "\n\nexport PATH=/srv/mdi:$PATH\n" >> ~/.bashrc
+echo -e "\n\nexport PATH=/srv/mdi:\$PATH\n" >> ~/.bashrc
 
 # validate and report success
 echo
+echo "installation summary"
 docker --version
 docker-compose --version
 echo
-tree -L 4 /srv
+tree /srv
 echo

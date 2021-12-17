@@ -35,7 +35,8 @@ allow a new MDI installation based on a new R version without
 having to reinstall Docker and other base OS support programs.
 
 ---
-## STEP 1 - Base AMI with Linux OS and Cloned MDI Server Repos
+---
+## AMI TIER #1 - Base AMI with Linux OS and Cloned MDI Server Repos
 
 ### Summary of the base AMI:
 
@@ -72,7 +73,7 @@ MDI public server instances, i.e., t3 medium.
 Storage volume size can be adjusted when a new EC2 instance is launched,
 so instances used to generate MDI AMIs only need enough storage to 
 handle the required installations, which is initially modest but increases
-when needing to create large Docker images in Step 2.
+when needing to create large Docker images in AMI Tier 2.
 
 #### MDI server repositories
 
@@ -91,12 +92,13 @@ with an MDI server installation. Please note that the AMI itself
 does not run the MDI, instead, the MDI is installed into and run in Docker  
 container by scripts found in mdi-web-server.git. 
 
-### Step 1 Instructions - create the base image
+---
+### TIER 1 INSTRUCTIONS - create the base image
 
 We only need to create a base image once per Ubuntu version. The steps
 below will clone the mdi-aws-ami repo into a new EC2 instance and execute  
 the server configuration script to prepare for installing the MDI in later 
-steps/AMIs. The script prepares the operating system to run the Docker 
+tiers/AMIs. The script prepares the operating system to run the Docker 
 images that will run R and the MDI.
 
 #### Launch an AWS instance
@@ -144,20 +146,26 @@ select the running EC2 instance and execute:
 
 Actions --> Images and templates --> Create image
 
-The base image should be named and described according to these patterns:
+The base image should be named and described according to the following conventions. Please note that we use a timestamp that can be used to infer
+the version of the multiple MDI repos installed into a given
+server instance.
 
 **name**  
-mdi-aws-ami-base-ubuntu_20.04
+mdi-base-ubuntu_20.04-yyyy_mm_dd
 
 **description**  
-Michigan Data Interface, base image, Ubuntu Linux 20.04
+Michigan Data Interface, base image, Ubuntu 20.04, yyyy_mm_dd
+
+Base images are generally kept private as general users will start
+from a bare bones
 
 ---
-## STEP 2 - Bare bones MDI AMI with pre-built Docker images
+---
+## AMI TIER #2 - Bare bones MDI AMI with pre-built Docker images
 
 ### Summary of the bare bones MDI AMI:
 
-- **source AMI** = appropriate Step 1 base AMI, from above
+- **source AMI** = appropriate Tier 1 base AMI, from above
 - **instance type** = t3.medium (2 vCPU, 4 GB RAM)
 - **storage** = 20 GB EBS SSD
 - **Docker images** = pre-built using 'server build'
@@ -169,7 +177,7 @@ Michigan Data Interface, base image, Ubuntu Linux 20.04
 #### Storage
 
 Because R creates a large Docker image size, the EBS volume size
-is increased for Step 2 image construction.
+is increased for Tier 2 image construction.
 
 #### Docker volumes
 
@@ -188,7 +196,8 @@ remounted again when the next container starts.
 The 'server' utility function provides access from the EC2 instance
 command line to update and modify the MDI installation in the Docker volume. It does this by temporarily launching a new apps-server container.
 
-### Step 2 Instructions - build and install the MDI
+---
+### TIER 2 INSTRUCTIONS - build and install the MDI
 
 We only need to create a bare bones AMI once per R version, since the
 Docker images use a specific R version. The AMI image does not need to be recreated
@@ -232,7 +241,7 @@ server build
 server install
 ```
 
-It can take a long time, even hours, to fully complete the build and 
+It can take a long time, even an hour or two, to fully complete the build and 
 install sequence, but it doesn't have to be repeated very often!
 Any future build will go much faster.
 
@@ -243,34 +252,80 @@ select the running EC2 instance and execute:
 
 Actions --> Images and templates --> Create image
 
-The bare bones image should be named and described according to these patterns:
+The bare bones image should be named and described according to the following conventions. Please note that we use a timestamp that can be used to infer
+the version of the multiple MDI repos installed into a given
+server instance.
 
 **name**  
-mdi-aws-ami-barebones-ubuntu_20.04-R_4.1.0
+mdi-barebones-ubuntu_20.04-R_4.1.0-yyyy_mm_dd
 
 **description**  
-Michigan Data Interface, bare bones image, Ubuntu Linux 20.04, R 4.1.0
+Michigan Data Interface, bare bones server image, Ubuntu 20.04, R 4.1.0, yyyy_mm_dd
 
-Such images should be made public for anyone to use.
+Bare bones server images should be made public for anyone to use.
 
 ---
-## STEP 3 - Add MDI tools suites
+---
+## AMI TIER #3 - Add publicly released MDI tools suites
 
 Developers providing tools, i.e., Stage 1 Pipelines and Stage 2 Apps, will often
-want to create a 3rd sequential image working from the appropriate bare bones image.
+want to create a 3rd sequential AMI tier working from the appropriate bare bones image.
 The details of such an image will depend on the needs of the developer,
-but the following general steps will often be involved:
+but the following general steps will nearly always be needed:
 
 - **server edit suites.yml**, to specify tools suites to add to the image
 - **server install**, to install those new tools suites
+
+Additionally, some tool providers may wish to include data resources in their image,
+which might be installed by actions such as:
+
 - **server edit stage1-pipelines.yml**, to set any needed values for resource installation
-- create scripts in /srv/mdi/resource-scripts that will download/create common resources
+- create/clone scripts into /srv/mdi/resource-scripts that will install common resources
 - **server resource ...**, to download/create the resources
 
-Such provider-specific images should be named and described according to these patterns:
+Provider-specific images should be named and described according to the following conventions. Please note that we use a timestamp that can be used to infer the version of the multiple MDI repos  installed into a given server instance.
 
 **name**  
-mdi-aws-ami-\<provider\>-ubuntu_20.04-R_4.1.0
+mdi-\<provider\>-ubuntu_20.04-R_4.1.0-yyyy_mm_dd
 
 **description**  
-Michigan Data Interface, \<provider\> image, Ubuntu Linux 20.04, R 4.1.0
+Michigan Data Interface, \<provider\> server image, Ubuntu Linux 20.04, R 4.1.0, yyyy_mm_dd
+
+Most often, provider AMIs should be made public for easy access by all users.
+
+---
+---
+## INSTANCE TIER #4 - Add private, unreleased tool suites
+
+Developers will often want to build on a Tier 2 or 3 AMI during development
+by adding tool suites that have not yet been publicly shared. In general, 
+the approach would be to:
+
+- create a new AWS EC2 instance from the proper Tier 2/3 server AMI
+- edit 'config/suite.yml' to add a developer tool suite, e.g., 'provider-mdi-apps-dev.git'
+- build and install as above
+
+Typically, such an instance need not be saved as an AMI. Instead, once the development tools 
+are ready for release they are copied into a public repository and shared
+via an updated Tier 3 provider AMI. 
+
+Please note that a development suite, e.g., 'provider-mdi-apps-dev.git', can easily
+"piggy back" onto a publicly released tool suite from the same provider, e.g., 
+'provider-mdi-apps.git' by making use of cross-suite utilization of shared code, as follows:
+
+```
+# pipeline.yml
+actions:
+    actionName:
+        condaFamilies:
+            - <suite>//shared-conda  
+        module: <suite>//example/shared-module
+        optionFamilies:
+            - <suite>//shared-options
+```
+
+etc.
+
+The above mechanism allows developers to continue to develop integrated code
+while keeping some of it private until ready for public release.
+

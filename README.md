@@ -142,6 +142,12 @@ bash ./initialize-mdi-instance.sh
 It will take a few minutes for all of the server components 
 to be installed.
 
+#### Security considerations for private base AMI
+
+Base images are generally kept private since general users will start
+from a Tier 2, i.e., bare bones, AMI. Accordingly, no further 
+action is required to secure a Tier 1 AMI (unlike Tier 2, below).
+
 #### Save the base AMI
 
 From within the [AWS Management Console](https://aws.amazon.com/console/), 
@@ -157,9 +163,6 @@ We use a timestamp that can be used to infer the version of the various MDI repo
 >
 >**description**  
 >Michigan Data Interface, base image, Ubuntu 20.04, yyyy_mm_dd
-
-Base images are generally kept private as general users will start
-from a Tier 2, i.e., bare bones AMI.
 
 ---
 ---
@@ -245,7 +248,32 @@ It can take a long time, even an hour or two, to fully complete the build and
 install sequence, but it doesn't have to be repeated very often!
 Any future build will go much faster.
 
-#### Save the base AMI
+#### Secure the bare bones AMI for public distribution
+
+Bare bones server images should be made public for anyone to use by
+setting the Permissions in the AWS console after creating the AMI. 
+In preparation for this public release, we follow the AWS guidelines
+for securing shared AMIs:
+
+- <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/building-shared-amis.html>
+
+Specifically, immediately before creating the AMI, run the following script, 
+which removes ssh keys and restricts root login permissions:
+
+```bash
+bash ~/mdi-aws-ami/prepare-public-ami.sh
+```
+
+If the sequence above was followed, and no other manipulations were done to 
+a running instance, there will be no other keys or access tokens on the disk 
+to be copied into the image.
+
+It is also critical to note that once the above commands are executed, the 
+instance from which the Tier 2 AMI is to be created may not be accessible
+if it is stopped and restarted. However, a new instance can always be launched
+from the saved AMI.
+
+#### Save the bare bones AMI
 
 From within the [AWS Management Console](https://aws.amazon.com/console/), 
 select the running EC2 instance and execute:
@@ -260,8 +288,6 @@ various MDI repos installed into a given server instance.
 >
 >**description**  
 >Michigan Data Interface, bare bones server image, Ubuntu 20.04, R 4.1.0, yyyy_mm_dd
-
-Bare bones server images should be made public for anyone to use.
 
 ---
 ---
@@ -281,6 +307,18 @@ which might be installed by actions such as:
 - create/clone scripts into **/srv/mdi/resource-scripts** that will install common resources
 - **server resource ...**, to download/create the resources
 
+#### Secure the provider AMI for public distribution
+
+Most often, provider AMIs should be made public for easy access by all users.
+Accordingly, please follow the instructions above for Tier 2 AMIs to
+secure your provider AMI for public release by running the following script.
+
+```bash
+bash ~/mdi-aws-ami/prepare-public-ami.sh
+```
+
+#### Save the provider AMI
+
 Provider-specific images should be named and described according to the following conventions. We use a timestamp that can be used to infer the version of the various 
 MDI repos installed into a given server instance.
 
@@ -289,8 +327,6 @@ MDI repos installed into a given server instance.
 >
 >**description**  
 >Michigan Data Interface, \<provider\> server image, Ubuntu Linux 20.04, R 4.1.0, yyyy_mm_dd
-
-Most often, provider AMIs should be made public for easy access by all users.
 
 ---
 ---

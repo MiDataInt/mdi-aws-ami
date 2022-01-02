@@ -2,7 +2,7 @@
 
 #---------------------------------------------------------------
 # Script to set up an AWS Ubuntu instance for serving the MDI web page.
-# Create a new instance, then run this script from an SSH command prompt.
+# Create a new EC2 instance, then run this script from an SSH command prompt.
 #---------------------------------------------------------------
 
 #---------------------------------------------------------------

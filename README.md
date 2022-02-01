@@ -1,15 +1,12 @@
 # mdi-aws-ami
 
-Admin-only resources to create Amazon Machine Images (AMIs) for 
+Admin-only resource to create Amazon Machine Images (AMIs) for 
 quickly launching Michigan Data Interface (MDI) public web servers 
-on Amazon Web Services (AWS).
-
-Information on AWS AMIs can be found here:  
+on Amazon Web Services (AWS). Information on AWS AMIs can be found here:  
 
 - <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html>
 
-The AMIs use Docker to install and run the MDI. An introduction to 
-Docker can be found here:
+The AMIs use Docker to install and run the MDI.
 
 - <https://www.docker.com/>
 
@@ -17,12 +14,12 @@ Docker can be found here:
 
 AMIs backed by EBS volumes are stored as snapshots that build on each other, 
 i.e., later AMIs only store the changes relative to earlier AMIs.
-Therefore, we build MDI AMIs sequentially to allow streamlined creation
-of later AMIs with appropriate variations.
+We build MDI AMIs sequentially to allow streamlined creation
+of later AMIs.
 
 ### AWS vs. Docker images
 
-Please note that the word 'image' is used by both AWS and Docker - do not 
+The word 'image' is used by both AWS and Docker - do not 
 confuse AWS images and Docker images.
 
 Amazon Machine Images (AMIs) represent the installation of a server OS and 
@@ -38,7 +35,7 @@ having to reinstall Docker and other base OS support programs.
 
 ---
 ---
-## AMI TIER #1 - Base AMI with Linux OS and Cloned MDI Server Repos
+## AMI TIER #1 - Base AMI with Linux and Cloned MDI Server Repos
 
 ### Summary of the base AMI:
 
@@ -55,43 +52,42 @@ having to reinstall Docker and other base OS support programs.
 #### Linux operating system
 
 The MDI can run on any operating system, but we use Ubuntu Linux
-by default, with version 20.04 being current as of this writing.
+by default, with version 20.04 LTS being current as of this writing.
 
 #### AWS region
 
 AWS AMIs are region specific, i.e., they are only available to be used
-for launching instances in the same region as the AMI itself. Because
-the MDI uses a "Michigan first" approach, we build all AMIs in the
-Ohio, us-east-2, AWS region, the one closest to Ann Arbor, MI.
+for launching instances in the same region as the AMI itself. We build 
+all supported AMIs in the Ohio, us-east-2, AWS region closest to Ann Arbor, MI.
 
 #### Instance type
 
-An AMI is not tied to a specific instance type, but we create the 
+An AMI is not tied to a specific instance type, but we create our 
 AMIs with the same resources as is recommended for eventually running
 MDI public server instances, i.e., t3 medium.
 
 #### Storage
 
-Storage volume size can be adjusted when a new EC2 instance is launched,
+Storage volume size can be expanded when a new EC2 instance is launched,
 so instances used to generate MDI AMIs only need enough storage to 
 handle the required installations, which is initially modest but increases
-when needing to create large Docker images in AMI Tier 2.
+when creating Docker images in AMI Tier 2.
 
 #### MDI server repositories
 
-As we do throughout the MDI project, we compartmentalize different MDI
+As throughout the MDI project, we compartmentalize MDI
 public server functions into two distinct repositories:
 
-**MiDataInt/mdi-aws-ami** is the repository that prepares the base 
+**MiDataInt/mdi-aws-ami** prepares the base 
 AMI for subsequent installation of the MDI. It installs things into the
 server OS itself, like Docker. The configuration 
 script in this repository could be run on any computer, but the intent 
-is that it be run on a blank, fresh Ubuntu AMI on AWS.
+is that it be run on a fresh Ubuntu AMI on AWS.
 
-**MiDataInt/mdi-web-server** is the repository with code that
+**MiDataInt/mdi-web-server** carries code that
 configures, assembles, and launches Docker images and containers 
 carrying an MDI server installation. Please note that the AMI itself 
-does not run the MDI, instead, the MDI is installed into and run in Docker 
+does not run the MDI, which is installed into and run in Docker 
 containers by scripts found in mdi-web-server.git. 
 
 ---
@@ -101,8 +97,7 @@ We only need to create a base image once per Ubuntu version. Accordingly, the
 steps below are usually only performed by MDI Project administrators. They
 clone the mdi-aws-ami repo into a new EC2 instance and run 
 the server configuration script to prepare for installing the MDI in later 
-tiers/AMIs. The script prepares the operating system to run the Docker 
-images that will run R and the MDI.
+tiers/AMIs. 
 
 #### Launch an AWS instance
 
@@ -114,12 +109,10 @@ a different base OS or AWS region, if desired).
 #### Log in to the new instance using an SSH terminal
 
 Details for how to log in to an AWS instance are amply documented by Amazon.
+Among many choices, we typically use Visual Studio Code with a remote connection 
+established via SSH.
 
 - <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstances.html>
-
-Among many choices, we typically use Visual Studio Code with a remote connection 
-established via SSH:
-
 - <https://code.visualstudio.com/docs/remote/remote-overview>
 
 #### Clone this repository
@@ -156,7 +149,7 @@ select the running EC2 instance and execute:
 Actions --> Images and templates --> Create image
 
 The base image should be named and described according to the following conventions. 
-We use a timestamp that can be used to infer the version of the various MDI repos installed into a given server instance.
+The timestamp can be used to infer the version of the various MDI repos installed into a given server instance.
 
 >**name**  
 >mdi-base_ubuntu-20.04_yyyy-mm-dd
@@ -171,10 +164,10 @@ We use a timestamp that can be used to infer the version of the various MDI repo
 ### Summary of the empty MDI AMI:
 
 - **source AMI** = appropriate Tier 1 base AMI, from above
-- **instance type** = t3.medium (2 vCPU, 4 GB RAM)
+- **instance type** = t3.xlarge (4 vCPU, 16 GB RAM)
 - **storage** = 20 GB EBS SSD
 - **Docker images** = pre-built using 'server build'
-- **MDI** = installed into Docker volume as frameworks only (no suites):
+- **MDI** = installed into Docker volume as frameworks only (no tool suites):
     - <https://github.com/MiDataInt/mdi-manager.git>
     - <https://github.com/MiDataInt/mdi-pipelines-framework.git>
     - <https://github.com/MiDataInt/mdi-apps-framework.git>
@@ -186,13 +179,13 @@ is increased for Tier 2 image construction.
 
 #### Docker volumes
 
-Disk storage locations can be confusing. It is important
-to remember that R, the MDI manager, frameworks and all associated R
+Disk storage locations can be confusing. 
+R, the MDI manager, frameworks, and all associated R
 packages are _not_ installed into the base EC2 instance file tree. Instead, they
 are installed into the Docker image.
 
 Specifically, all MDI files, including the required R package library,
-are installed into a persistent Docker volume that is, generally speaking,
+are installed into a persistent Docker volume that is
 only accessible from within a running container. That volume is addressed
 within the container on familiar paths, i.e., /srv/mdi, etc. The data
 in the volume is retained by Docker after containers stop, ready to be 
@@ -209,7 +202,8 @@ Docker images use a specific R version. The AMI image does not need to be
 recreated to account for MDI updates as these are always available by 
 re-pulling the appropriate repositories. Accordingly, the steps below are 
 usually only performed by MDI Project administrators. They build the required 
-Docker images and use a temporary apps-server container to install the MDI framework, including its R packages, onto the appropriate Docker volume.
+Docker images and use a temporary apps-server container to install the MDI framework
+and R packages onto the appropriate Docker volume.
 
 #### Launch an AWS instance
 
@@ -244,8 +238,8 @@ server build
 server install
 ```
 
-It can take a long time to fully complete the build and 
-install sequence, but it doesn't have to be repeated very often!
+It takes a while to fully complete the build and 
+install sequence, but it doesn't have to be repeated very often.
 Any future build will go much faster.
 
 #### Secure the empty AMI for public distribution
@@ -264,14 +258,12 @@ which removes ssh keys and restricts root login permissions:
 bash ~/mdi-aws-ami/prepare-public-ami.sh
 ```
 
-If the sequence above was followed, and no other manipulations were done to 
-a running instance, there will be no other keys or access tokens on the disk 
-to be copied into the image.
+If the sequence above was followed, there will be no other keys or access 
+tokens on the disk to be copied into the image.
 
-It is also critical to note that once the above commands are executed, the 
-instance from which the Tier 2 AMI is to be created may not be accessible
-if it is stopped and restarted. However, a new instance can always be launched
-from the saved AMI.
+Once the commands above are executed, the 
+instance from which the Tier 2 AMI is created will not be accessible
+after it is stopped - just launch a new instance from the saved AMI.
 
 #### Save the empty AMI
 
@@ -280,8 +272,7 @@ select the running EC2 instance and execute:
 
 Actions --> Images and templates --> Create image
 
-The empty image should be named and described according to the following conventions. We use a timestamp that can be used to infer the version of the 
-various MDI repos installed into a given server instance.
+The empty image should be named and described according to the following conventions. 
 
 >**name**  
 >mdi-empty_ubuntu-20.04_R-4.1.0_yyyy-mm-dd
@@ -293,7 +284,7 @@ various MDI repos installed into a given server instance.
 ---
 ## AMI TIER #3 - Add publicly released MDI tools suites
 
-Developers providing tools, i.e., Stage 1 Pipelines and Stage 2 Apps, for others to use
+Developers providing tools for others to use
 should create a 3rd sequential AMI tier working from the appropriate empty image.
 The details of such an image will depend on the needs of the developer,
 but the following general steps will typically be needed:
@@ -319,8 +310,7 @@ bash ~/mdi-aws-ami/prepare-public-ami.sh
 
 #### Save the provider AMI
 
-Provider-specific images should be named and described according to the following conventions. We use a timestamp that can be used to infer the version of the various 
-MDI repos installed into a given server instance.
+Provider-specific images should be named and described according to the following conventions. 
 
 >**name**  
 >mdi-\<provider\>_ubuntu-20.04_R-4.1.0_yyyy-mm-dd
@@ -352,10 +342,11 @@ is undesirable as the GitHub PAT entered above would be saved with the image.
 Instead, once the development tools are ready for release they are copied 
 into a public tool suite repository and shared via an updated Tier 3 provider AMI. 
 
-Please note that a development suite, e.g., 'provider-mdi-tools-dev', can easily
+A development suite, e.g., 'provider-mdi-tools-dev', can easily
 "piggy back" onto a publicly released tool suite from the same provider, e.g., 
-'provider-mdi-tools' by making use of cross-suite referencing of shared code, 
-as follows:
+'provider-mdi-tools' by making use of cross-suite referencing of shared code.
+This approach allows you to develop integrated code
+while keeping some of it private until ready for public release.
 
 ```yml
 # pipeline.yml
@@ -367,6 +358,3 @@ actions:
         optionFamilies:
             - <suite>//shared-options
 ```
-
-The above mechanism allows developers to continue to develop integrated code
-while keeping some of it private until ready for public release.

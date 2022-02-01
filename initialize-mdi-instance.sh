@@ -4,6 +4,7 @@
 # Script to set up an AWS Ubuntu instance for serving the MDI web page.
 # Create a new EC2 instance, then run this script from an SSH command prompt.
 #---------------------------------------------------------------
+DOCKER_COMPOSE_VERSION=1.29.2 # see https://docs.docker.com/compose/install/
 
 #---------------------------------------------------------------
 # use sudo initially to install resources and configure server as root
@@ -50,7 +51,7 @@ sudo apt-get install -y \
 # install docker-compose
 echo 
 echo "install Docker compose"
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 
 # allow user ubuntu to control docker without sudo
@@ -93,7 +94,9 @@ git clone https://github.com/MiDataInt/mdi-web-server.git
 echo 
 echo "copy server config templates"
 cp mdi-web-server/lib/inst/*.sh  /srv/mdi/config
-cp mdi-web-server/lib/inst/*.yml /srv/mdi/config
+git clone https://github.com/MiDataInt/mdi-manager.git
+cp mdi-manager/inst/config/*.yml /srv/mdi/config
+rm -rf mdi-manager
 
 # add the server executable script to PATH
 echo 

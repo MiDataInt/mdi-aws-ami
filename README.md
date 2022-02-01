@@ -145,7 +145,7 @@ to be installed.
 #### Security considerations for private base AMI
 
 Base images are generally kept private since general users will start
-from a Tier 2, i.e., bare bones, AMI. Accordingly, no further 
+from a Tier 2, i.e., empty, AMI. Accordingly, no further 
 action is required to secure a Tier 1 AMI (unlike Tier 2, below).
 
 #### Save the base AMI
@@ -159,16 +159,16 @@ The base image should be named and described according to the following conventi
 We use a timestamp that can be used to infer the version of the various MDI repos installed into a given server instance.
 
 >**name**  
->mdi-base-ubuntu_20.04-yyyy_mm_dd
+>mdi-base_ubuntu-20.04_yyyy-mm-dd
 >
 >**description**  
->Michigan Data Interface, base image, Ubuntu 20.04, yyyy_mm_dd
+>Michigan Data Interface, base image, Ubuntu 20.04, yyyy-mm-dd
 
 ---
 ---
-## AMI TIER #2 - Bare bones MDI AMI with pre-built Docker images
+## AMI TIER #2 - Empty MDI AMI with pre-built Docker images
 
-### Summary of the bare bones MDI AMI:
+### Summary of the empty MDI AMI:
 
 - **source AMI** = appropriate Tier 1 base AMI, from above
 - **instance type** = t3.medium (2 vCPU, 4 GB RAM)
@@ -204,7 +204,7 @@ command line to update and modify the MDI installation in the Docker volume. It 
 ---
 ### TIER 2 INSTRUCTIONS - build and install the MDI
 
-We only need to create a bare bones AMI once per R version, since the
+We only need to create an empty AMI once per R version, since the
 Docker images use a specific R version. The AMI image does not need to be 
 recreated to account for MDI updates as these are always available by 
 re-pulling the appropriate repositories. Accordingly, the steps below are 
@@ -238,19 +238,19 @@ Change the 'R_VERSION' line as needed, and nothing else.
 server build
 ```
 
-#### Install the bare bones MDI
+#### Install the empty MDI
 
 ```bash
 server install
 ```
 
-It can take a long time, even an hour or two, to fully complete the build and 
+It can take a long time to fully complete the build and 
 install sequence, but it doesn't have to be repeated very often!
 Any future build will go much faster.
 
-#### Secure the bare bones AMI for public distribution
+#### Secure the empty AMI for public distribution
 
-Bare bones server images should be made public for anyone to use by
+Empty server images should be made public for anyone to use by
 setting the Permissions in the AWS console after creating the AMI. 
 In preparation for this public release, we follow the AWS guidelines
 for securing shared AMIs:
@@ -273,28 +273,28 @@ instance from which the Tier 2 AMI is to be created may not be accessible
 if it is stopped and restarted. However, a new instance can always be launched
 from the saved AMI.
 
-#### Save the bare bones AMI
+#### Save the empty AMI
 
 From within the [AWS Management Console](https://aws.amazon.com/console/), 
 select the running EC2 instance and execute:
 
 Actions --> Images and templates --> Create image
 
-The bare bones image should be named and described according to the following conventions. We use a timestamp that can be used to infer the version of the 
+The empty image should be named and described according to the following conventions. We use a timestamp that can be used to infer the version of the 
 various MDI repos installed into a given server instance.
 
 >**name**  
->mdi-barebones-ubuntu_20.04-R_4.1.0-yyyy_mm_dd
+>mdi-empty_ubuntu-20.04_R-4.1.0_yyyy-mm-dd
 >
 >**description**  
->Michigan Data Interface, bare bones server image, Ubuntu 20.04, R 4.1.0, yyyy_mm_dd
+>Michigan Data Interface, empty server image, Ubuntu 20.04, R 4.1.0, yyyy-mm-dd
 
 ---
 ---
 ## AMI TIER #3 - Add publicly released MDI tools suites
 
 Developers providing tools, i.e., Stage 1 Pipelines and Stage 2 Apps, for others to use
-should create a 3rd sequential AMI tier working from the appropriate bare bones image.
+should create a 3rd sequential AMI tier working from the appropriate empty image.
 The details of such an image will depend on the needs of the developer,
 but the following general steps will typically be needed:
 
@@ -323,10 +323,10 @@ Provider-specific images should be named and described according to the followin
 MDI repos installed into a given server instance.
 
 >**name**  
->mdi-\<provider\>-ubuntu_20.04-R_4.1.0-yyyy_mm_dd
+>mdi-\<provider\>_ubuntu-20.04_R-4.1.0_yyyy-mm-dd
 >
 >**description**  
->Michigan Data Interface, \<provider\> server image, Ubuntu Linux 20.04, R 4.1.0, yyyy_mm_dd
+>Michigan Data Interface, \<provider\> server image, Ubuntu Linux 20.04, R 4.1.0, yyyy-mm-dd
 
 ---
 ---

@@ -39,7 +39,7 @@ having to reinstall Docker and other base OS support programs.
 
 ### Summary of the base AMI:
 
-- **source AMI** = Ubuntu 20.04 standard image, X86_64
+- **source AMI** = Ubuntu 22.04 standard image, X86_64
 - **Linux user** = ubuntu, the AWS standard
 - **region** = Ohio, us-east-2
 - **instance type** = t3.medium (2 vCPU, 4 GB RAM)
@@ -52,7 +52,7 @@ having to reinstall Docker and other base OS support programs.
 #### Linux operating system
 
 The MDI can run on any operating system, but we use Ubuntu Linux
-by default, with version 20.04 LTS being current as of this writing.
+by default, with version 22.04 LTS being current as of this writing.
 
 #### AWS region
 
@@ -118,7 +118,7 @@ established via SSH.
 #### Clone this repository
 
 From within an SSH command shell on the new instance 
-(note that git is pre-installed with Ubuntu 20.04):
+(note that git is pre-installed with Ubuntu):
 
 ```bash
 cd ~
@@ -152,10 +152,10 @@ The base image should be named and described according to the following conventi
 The timestamp can be used to infer the version of the various MDI repos installed into a given server instance.
 
 >**name**  
->mdi-base_ubuntu-20.04_yyyy-mm-dd
+>mdi-base_ubuntu-22.04_yyyy-mm-dd
 >
 >**description**  
->Michigan Data Interface, base image, Ubuntu 20.04, yyyy-mm-dd
+>Michigan Data Interface, base image, Ubuntu 22.04, yyyy-mm-dd
 
 ---
 ---
@@ -275,10 +275,10 @@ Actions --> Images and templates --> Create image
 The empty image should be named and described according to the following conventions. 
 
 >**name**  
->mdi-empty_ubuntu-20.04_R-4.1.0_yyyy-mm-dd
+>mdi-empty_ubuntu-22.04_R-4.2.0_yyyy-mm-dd
 >
 >**description**  
->Michigan Data Interface, empty server image, Ubuntu 20.04, R 4.1.0, yyyy-mm-dd
+>Michigan Data Interface, empty server image, Ubuntu 22.04, R 4.2.0, yyyy-mm-dd
 
 ---
 ---
@@ -313,10 +313,10 @@ bash ~/mdi-aws-ami/prepare-public-ami.sh
 Provider-specific images should be named and described according to the following conventions. 
 
 >**name**  
->mdi-\<provider\>_ubuntu-20.04_R-4.1.0_yyyy-mm-dd
+>mdi-\<provider\>_ubuntu-22.04_R-4.2.0_yyyy-mm-dd
 >
 >**description**  
->Michigan Data Interface, \<provider\> server image, Ubuntu Linux 20.04, R 4.1.0, yyyy-mm-dd
+>Michigan Data Interface, \<provider\> server image, Ubuntu Linux 22.04, R 4.2.0, yyyy-mm-dd
 
 ---
 ---

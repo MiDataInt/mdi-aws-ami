@@ -1,8 +1,12 @@
-# mdi-aws-ami
+# MDI AWS AMI Support
 
-Admin-only resources to create Amazon Machine Images (AMIs) for 
-quickly launching Michigan Data Interface (MDI) public web servers 
-on Amazon Web Services (AWS).
+The [Michigan Data Interface](https://midataint.github.io/) (MDI) 
+is a framework for developing, installing and running 
+Stage 1 HPC **pipelines** and Stage 2 interactive web applications 
+(i.e., **apps**) in a standardized design interface.
+
+This repository carries admin-only resources to create Amazon Machine Images (AMIs)  
+for quickly launching MDI public web servers on Amazon Web Services (AWS).
 
 Information on AWS AMIs can be found here:  
 

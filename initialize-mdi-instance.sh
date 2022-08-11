@@ -4,7 +4,6 @@
 # Script to set up an AWS Ubuntu instance for serving the MDI web page.
 # Create a new EC2 instance, then run this script from an SSH command prompt.
 #---------------------------------------------------------------
-DOCKER_COMPOSE_VERSION=1.29.2 # see https://docs.docker.com/compose/install/
 
 #---------------------------------------------------------------
 # use sudo initially to install resources and configure server as root
@@ -30,7 +29,7 @@ sudo apt-get install -y \
   make \
   binutils
 
-# install Docker
+# install Docker, now including docker-compose via plugin
 echo 
 echo "install Docker engine"
 sudo apt-get install \
@@ -38,21 +37,13 @@ sudo apt-get install \
   curl \
   gnupg \
   lsb-release
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+sudo mkdir -p /etc/apt/keyrings  
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
-sudo apt-get install -y \
-  docker-ce \
-  docker-ce-cli \
-  containerd.io
-
-# install docker-compose
-echo 
-echo "install Docker compose"
-sudo curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 # allow user ubuntu to control docker without sudo
 echo 
@@ -109,7 +100,7 @@ echo -e "\n\nexport PATH=/srv/mdi:\$PATH\n" >> ~/.bashrc
 echo
 echo "installation summary"
 docker --version
-docker-compose --version
+docker compose version
 echo
 tree /srv
 echo

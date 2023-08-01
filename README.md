@@ -221,6 +221,12 @@ instance must be in the same region as the AMI itself.
 
 Please see details above.
 
+#### Install any pending Ubuntu library upgrades and security patches
+
+```bash
+server upgrade
+```
+
 #### Specify the R version to use for this build
 
 From within a terminal, i.e., bash command shell, on the new instance:
@@ -294,6 +300,7 @@ should create a 3rd sequential AMI tier working from the appropriate empty image
 The details of such an image will depend on the needs of the developer,
 but the following general steps will typically be needed:
 
+- **server upgrade**, to install any pending system library updates and security patches
 - **server edit suites.yml**, to specify tools suites to add to the image
 - **server install**, to install those new tools suites
 
@@ -332,6 +339,7 @@ by adding tool suites that have not yet been publicly shared. In general,
 the approach would be to:
 
 - create a new **AWS EC2 _instance_** from the proper Tier 2/3 server AMI
+- **server upgrade**, to install any pending system library updates and security patches
 - **server edit suites.yml**, to add a developer tool suite, e.g., 'provider/provider-mdi-tools-dev'
 - **server edit server.sh**, to set the server properties and add a <code>GITHUB_PAT</code> with suite access
 - **server edit stage2-apps.yml**, to configure the required <code>access_control</code> and, optionally, customize the site

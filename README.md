@@ -291,6 +291,14 @@ The empty image should be named and described according to the following convent
 >**description**  
 >Michigan Data Interface, empty server image, Ubuntu 22.04, R 4.2.0, yyyy-mm-dd
 
+#### Make the AMI public for anyone to use
+
+In the AWS EC2 console, open the AMIs tab, select the AMI you just created and execute:
+
+Actions --> Edit AMI permissions
+
+Choose "Public" and "Save Changes.
+
 ---
 ---
 ## AMI TIER #3 - Add publicly released MDI tools suites
@@ -329,6 +337,14 @@ Provider-specific images should be named and described according to the followin
 >
 >**description**  
 >Michigan Data Interface, \<provider\> server image, Ubuntu Linux 22.04, R 4.2.0, yyyy-mm-dd
+
+#### Make the AMI public for anyone to use
+
+In the AWS EC2 console, open the AMIs tab, select the AMI you just created and execute:
+
+Actions --> Edit AMI permissions
+
+Choose "Public" and "Save Changes.
 
 ---
 ---

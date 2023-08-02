@@ -66,6 +66,14 @@ sudo chown -R ubuntu   data mdi
 sudo chgrp -R mdi-edit data mdi
 sudo chmod -R ug+rwx   data mdi
 
+# prepare for possible AWS EFS mounts
+cd ~
+git clone https://github.com/aws/efs-utils
+cd efs-utils
+./build-deb.sh
+sudo apt-get -y install ./build/amazon-efs-utils*deb
+cd /srv
+
 #---------------------------------------------------------------
 # continue as user ubuntu (i.e., not sudo) to populate /srv
 #---------------------------------------------------------------

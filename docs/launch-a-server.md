@@ -49,8 +49,8 @@ Log into the server using the SSH key you specified when you launched the instan
 Once logged in, navigate to the folder that carries all the server files:
 
 ```sh
-cd /srv
-ls -l
+$ cd /srv
+$ ls -l
 
 total 12
 drwxrwxr-x 2 ubuntu mdi-edit 4096 Nov 21 18:12 data

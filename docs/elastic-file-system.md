@@ -21,7 +21,7 @@ VPC security group as your EFS. This security group was created when you created
 Log into your instance using SSH and run:
 
 ```
-server edit mount.sh
+$ server edit mount.sh
 ```
 
 Follow the instructions in the file comments, editing the file path and file system ID
@@ -31,7 +31,7 @@ Finally, start the server, where the `up` command will automatically mount the E
 bind-mount /srv/mnt into your app-server containers.
 
 ```
-server up
+$ server up
 ```
 
 To use the new EFS mount, adjust either your server config or your app to use the appropriate

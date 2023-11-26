@@ -32,7 +32,7 @@ This will typically be a second developer instance of your web server, e.g., `de
 (Re-)Connect to your AWS web server using VS Code Remote – SSH, then start the web server in developer mode by executing:
 
 ```sh
-server up dev
+$ server up dev
 ```
 
 Adding the `dev` option to the standard `server up` sub-command launches the web server in interactive mode (so you can see the log output from the server) and places all repositories at the tip of the main branch (not at the latest release tag). 

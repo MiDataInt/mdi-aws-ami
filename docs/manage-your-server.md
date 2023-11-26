@@ -12,7 +12,7 @@ tasks without needing deep familiarity with Docker, R
 or other server components. Simply type `server` to get started.
 
 ```sh
-server
+$ server
 
 usage:  ./server <COMMAND> ...
 
@@ -46,7 +46,7 @@ The `edit` command will bring up the nano text editor so that you can
 edit one of the following required or optional configuration files.
 
 ```sh
-server edit
+$ server edit
 
 usage:  ./server edit <CONFIG_FILE>
 

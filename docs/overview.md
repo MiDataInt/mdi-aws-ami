@@ -17,7 +17,8 @@ The details of these two repositories are mostly for MDI project developers,
 although some advanced users may wish to build their own images or servers.
 
 Most end users will simply wish to use the pre-built tools 
-to launch their own MDI web server.
+to launch their own MDI web server. The image below is just one
+example of the interactive data analysis tools you can quickly develop and use.
 
 {% include figure.html file="trackBrowser.png" %}
 

@@ -84,7 +84,7 @@ and `push-key` authorize you to access the server. As with all SSH key files, `p
 chmod go-rwx ~/.ssh/mdi-push-key.pem
 ```
 
-#### Troubleshooting #1 - HPC server outgoing SSH
+### Troubleshooting #1 - HPC server outgoing SSH
 
 There are two important networking requirements for data push to
 work correctly.
@@ -108,7 +108,7 @@ Don't worry, for a well designed pipeline this won't re-launch all the work.
 The pipeline will skip over prior successful actions and simply run the data
 push it couldn't do on the worker node.
 
-#### Troubleshooting #2 - AWS security group incoming SSH
+### Troubleshooting #2 - AWS security group incoming SSH
 
 In addition, your AWS server must be willing to accept incoming SSH connections
 from the IP address of your HPC server. Adjust these settings in your 

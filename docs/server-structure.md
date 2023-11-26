@@ -8,14 +8,18 @@ nav_order: 10
 
 MDI public web servers are hosted on AWS EC2 instances constructed from AWS AMIs according the hierarchy below.
 
+{% include figure.html file="images/server-structure.png" %}
+
 Additional information on AWS AMIs and EC2 instances can be found here:  
--  [Amazon Machine Images](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html)
+-  [Amazon Machine Images](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html) (AMIs)
 - [Elastic Compute Cloud](https://aws.amazon.com/pm/ec2) (EC2) instances
 
 ### Tiered AMI/instance construction
 
 To facilitate construction and maintenance, AMIs and associated instances are constructed
 in stages, i.e, tiers, as follows:
+
+{% include figure.html file="images/ami-tiers.png" %}
 
 - **Tier 1 "bare" AMIs** carry a specific Linux operating system and Docker
 - **Tier 2 "empty" AMIs** additionally carry a specific R installation and the MDI with no tool suites
@@ -32,13 +36,13 @@ They can simply be maintained as working Tier 3 or 4 web server instances.
 
 Most users will therefore want to start from a Tier 2 empty AMI and add their tool suite(s) 
 to create a Tier 3 instance. Briefly, you will:
-- use an MDI Tier 2 AMI to `launch` your AWS EC2 instance
+- [use an MDI Tier 2 AMI](https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Images:visibility=public-images;v=3;search=:Michigan%20Data%20Interface) to `launch` your AWS EC2 instance
 - `edit` a few files to establish server configuration details (e.g., your web domain)
 - `build` your final container images
 - `install` your tool suite code
 - make your site live, i.e., bring it `up`
 
-Each of these actions are encapsulated in the `server` management utility 
+These actions are encapsulated in the `server` management utility 
 provided by `mdi-web-server` code to make server management easy.
 
 ### Web server microservices run as Docker containers

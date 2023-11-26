@@ -8,7 +8,8 @@ nav_order: 75
 
 Developers may find it convenient to edit code in a MDI web server running on a public AWS instance to develop its codebase. It requires just two additional steps in VS Code to connect into the Docker container where your web server runs. 
 
-Specifically, MDI apps server R code is installed into a permanent docker volument (not a bind mount) that is only accessible from within a running container. 
+Specifically, MDI apps server R code is installed into a permanent docker volume (not a bind mount) that is only accessible from within a running container. 
+Advanced developers can see the [Docker compose file here](https://github.com/MiDataInt/mdi-web-server/blob/main/docker-compose.yml)). 
 
 ### Install VS Code and the required remote and container extensions
 

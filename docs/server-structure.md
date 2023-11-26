@@ -12,15 +12,15 @@ Additional information on AWS AMIs and EC2 instances can be found here:
 -  [Amazon Machine Images](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html)
 - [Elastic Compute Cloud](https://aws.amazon.com/pm/ec2) (EC2) instances
 
-## Tiered AMI/instance construction
+### Tiered AMI/instance construction
 
 To facilitate construction and maintenance, AMIs and associated instances are constructed
 in stages, i.e, tiers, as follows:
 
 - **Tier 1 "bare" AMIs** carry a specific Linux operating system and Docker
 - **Tier 2 "empty" AMIs** additionally carry a specific R installation and the MDI with no tool suites
-- **Tier 3 "tool suite" AMIs** additionally carry installed public tool suites and resources
-- **Tier 4 "private" AMIs** additionally carry installed private tool suites and resources
+- **Tier 3 "tool suite" AMIs/instances** additionally carry installed public tool suites and resources
+- **Tier 4 "private" AMIs/instances** additionally carry installed private tool suites and resources
 
 Tiers 1 to 3 are suitable for public sharing, Tier 4 is not. 
 
@@ -30,9 +30,9 @@ are prepared if needed by specific research teams.
 Tiers 3 and 4 need not be saved as AMIs, i.e., images, at all if sharing is not important.
 They can simply be maintained as working Tier 3 or 4 web server instances. 
 
-Most users will therefore want to start from a Tier 2 empty AMI and add their tool suite(s) to it
+Most users will therefore want to start from a Tier 2 empty AMI and add their tool suite(s) 
 to create a Tier 3 instance. Briefly here, you will:
-- use an MDI Tier 2 AMI to launch your AWS EC2 instance
+- use an MDI Tier 2 AMI to `launch` your AWS EC2 instance
 - `edit` a few files to establish server configuration details (e.g., your web domain)
 - `build` your final container images
 - `install` your tool suite code
@@ -41,7 +41,7 @@ to create a Tier 3 instance. Briefly here, you will:
 Each of these actions are encapsulated in the `server` management utility 
 provided by `mdi-web-server` code to make server management easy.
 
-## Web server microservices run as Docker containers
+### Web server microservices run as Docker containers
 
 MDI web servers run as a set of microservices from within
 Docker containers. 
@@ -85,6 +85,6 @@ You must launch your instance with at least as much storage as the AMI itself,
 but can request more storage (or a larger intances) as suits your needs.
 
 However, as your data needs grow, it is highly recommended to create an
-[Amazon Elastic File System]() (EFS) and mount it to your web server, which
+[Amazon Elastic File System](https://aws.amazon.com/efs/) (EFS) and mount it to your web server, which
 allows you data to be managed separately from the server resources.
 MDI web servers are ready for you to mount your EFS to path `/srv/mnt/efs`.

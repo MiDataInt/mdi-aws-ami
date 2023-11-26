@@ -1,7 +1,7 @@
 ---
 title: Elastic File System
 has_children: false
-nav_order: 10
+nav_order: 50
 ---
 
 ## {{ page.title }}

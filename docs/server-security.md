@@ -11,7 +11,7 @@ foremost in your mind from the outset.
 
 ## User authentication
 
-The [MDI apps framework]() that actually serves the MDI web page
+The [MDI apps framework](https://midataint.github.io/mdi-apps-framework) that actually serves the MDI web page
 has full support for secure server access with authentication
 with external authentication services, e.g., Google or Globus.
 To use these features, you must have an established developer account

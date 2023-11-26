@@ -16,7 +16,7 @@ This is what a secure server looks like, including:
 - SSL/TLS encryption, verified by the lock icon in the address bar
 - OAuth2 user authentication, in this example via Globus
 
-{% include figure.html file="images/oauth2.png" %}
+{% include figure.html file="oauth2.png" %}
 
 ### User authentication
 

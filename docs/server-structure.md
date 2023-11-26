@@ -8,7 +8,7 @@ nav_order: 10
 
 MDI public web servers are hosted on AWS EC2 instances constructed from AWS AMIs according the hierarchy below.
 
-{% include figure.html file="images/server-structure.png" %}
+{% include figure.html file="server-structure.png" %}
 
 Additional information on AWS AMIs and EC2 instances can be found here:  
 -  [Amazon Machine Images](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html) (AMIs)
@@ -19,7 +19,7 @@ Additional information on AWS AMIs and EC2 instances can be found here:
 To facilitate construction and maintenance, AMIs and associated instances are constructed
 in stages, i.e, tiers, as follows:
 
-{% include figure.html file="images/ami-tiers.png" %}
+{% include figure.html file="ami-tiers.png" %}
 
 - **Tier 1 "bare" AMIs** carry a specific Linux operating system and Docker
 - **Tier 2 "empty" AMIs** additionally carry a specific R installation and the MDI with no tool suites

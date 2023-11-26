@@ -19,6 +19,6 @@ although some advanced users may wish to build their own images or servers.
 Most end users will simply wish to use the pre-built tools 
 to launch their own MDI web server.
 
-{% include figure.html file="images/trackBrowser.png" %}
+{% include figure.html file="trackBrowser.png" %}
 
 {% include mdi-project-documentation.md %}

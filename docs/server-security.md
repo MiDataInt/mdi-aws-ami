@@ -6,8 +6,8 @@ nav_order: 20
 
 ## {{ page.title }}
 
-As with any public web server, you will want to keep security
-foremost in your mind from the outset. Many of the essential security
+As with any public web server, you want to keep security
+foremost in your mind from the outset. Many essential security
 features are established by editing `config/stage2-apps.yml` as described in detail here:
 - <https://midataint.github.io/mdi-apps-framework/docs/server-deployment/server-security.html>
 
@@ -35,7 +35,7 @@ require that your server have a permanent domain name mapped to it
 via DNS, so that it can be recognized on the internet. 
 
 A domain name is easily obtained for minimal cost using 
-[AWS Route 53](https://console.aws.amazon.com/route53/v2/home).
+[AWS Route 53](https://aws.amazon.com/route53/).
 
 ## Maintaining your server via upgrades
 

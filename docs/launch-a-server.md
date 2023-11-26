@@ -6,7 +6,7 @@ nav_order: 30
 
 ## {{ page.title }}
 
-These instructions assume you followed documentation from external sources to
+These instructions assume you have followed documentation from external sources to
 [establish an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html),
 and that you know what MDI tool suites whose apps you wish to use.
 
@@ -20,14 +20,14 @@ as described in our [Basic Training](https://midataint.github.io/mdi-basic-train
 You will nearly always want to launch your MDI web server instance on AWS
 using one of the pre-built Tier 2 or Tier 3 AMIs, which is much faster, more efficient,
 and less confusing for beginners. Choose a Tier 2 AMI if you need to list the tool suites yourself,
-or a Tier 3 AMI is one was provided to you by a tool suite developer.
+or a Tier 3 AMI if one was provided to you by a tool suite developer.
 
-Here is the link to the MDI public AMIs where you will find the Tier 2 AMI (you need to log in to 
+Here is the link to the MDI public AMIs where you will find a suitable Tier 2 AMI (you need to log in to 
 AWS for this link to work as expected):
-- https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Images:visibility=public-images;v=3;search=:Michigan%20Data%20Interface
+- <https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Images:visibility=public-images;v=3;search=:Michigan%20Data%20Interface>
 
-Once you have found the AMI, simply launch an instance from it.  Adjust the size and capacity as suits 
-your needs, with the following guidance
+Once you have found the AMI, simply launch an instance from it.  Adjust the instance size and capacity as suits 
+your needs, with the following guidance:
 - t3.small instances are acceptable for limited use servers
 - t3.medium instances are best for routine use among a lab group
 - ~30 GB RAM is suitable for moderate data needs, or if you will mount a data file system
@@ -40,7 +40,7 @@ You may choose to assign a reserved
 [Elastic IP Address](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html) 
 to the server but it is not necessary. Just
 be aware that if you stop your instance without an elastic IP it will be assigned a new IP
-when you restart it, requiring a modification to your DNS record. 
+when you restart it, requiring modification of your DNS record. 
 
 ### Learn the basic server file structure
 
@@ -59,14 +59,14 @@ drwxr-xr-x 3 root   root     4096 Nov 23 17:44 mnt
 ```
 
 Folder `mdi` carries the `mdi-web-server` installation,
-folder `data` and `mnt` are where you will upload MDI data packages 
+folders `data` and `mnt` are where you will upload MDI data packages 
 and other required data resources.
 
 ### Use the command line utility to manage your server
 
 The `mdi-web-server` repository provides a convenient command line
 management utility that will help you perform all required server
-tasks without having to have deep familiarity with Docker, R
+tasks without needing deep familiarity with Docker, R
 or other server components. Simply type `server` to get started.
 
 ```sh
@@ -90,13 +90,13 @@ additional resource management commands:
 ```
 
 The sub-commands are named informatively and hopefully with the brief 
-descriptions provided it will be apparent what each one does. You may want
+descriptions it will be apparent what each one does. You may want
 to refamiliarize yourself with the 
 [web server structure](https://midataint.github.io/mdi-aws-ami/docs/server-structure.html)
-if something is not clear.
+if not clear.
 
 Importantly, the `server` subcommands are presented in logical order of their
-usage to get your server up an running. Start from the top and work down!
+usage to get your server up and running. Start from the top and work down!
 
 ### Server configuration files
 

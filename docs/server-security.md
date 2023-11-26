@@ -7,7 +7,9 @@ nav_order: 20
 ## {{ page.title }}
 
 As with any public web server, you will want to keep security
-foremost in your mind from the outset.
+foremost in your mind from the outset. Many of the essential security
+features are established by editing `config/stage2-apps.yml` as described in detail here:
+- <https://midataint.github.io/mdi-apps-framework/docs/server-deployment/server-security.html>
 
 ## User authentication
 

@@ -124,3 +124,10 @@ to help you fill them in properly. Briefly, you will use the files to:
 - describe your server
 - establish a secure login approach
 - declare the tool suites you wish to use
+
+Also, the trickiest bits regarding server security and file paths
+are documented in detail in the `mdi-apps-framework`, since some apply
+to non-public servers as well:
+
+- <https://midataint.github.io/mdi-apps-framework/docs/server-deployment/server-security.html>
+- <https://midataint.github.io/mdi-apps-framework/docs/server-deployment/shinyFiles.html>
